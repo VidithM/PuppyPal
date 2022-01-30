@@ -57,29 +57,36 @@ myRect2.addEventListener("click", (evt) => {
 function sendMessage(data) {
   const data = data
 
-  if (messaging.peerSocket.readyState === messaging.peerSocket.OPEN) {
+  if (peerSocket.readyState === peerSocket.OPEN) {
     // Send the data to companion app as a message
-    messaging.peerSocket.send(data);
+    peerSocket.send(data);
   }
 }
 
+function welfareCheck(){
+  vibration.start("ring");
+  demo.text = "Are you good?";
+  buttonyes.style.visibility = "visible";
+  buttonno.style.visibility = "visible";
+}
+
+peerSocket.addEventListener("message", (obj) => {
+  if(obj.status == "abnormal_cardiac_pattern"){
+    welfareCheck();
+  }
+});
 
 
 if (HeartRateSensor) {
    console.log("This device has a HeartRateSensor!");
    const hrm = new HeartRateSensor();
    hrm.addEventListener("reading", () => {
-     messaging.peerSocket.addEventListener("open", (evt) => {
-     sendMessage(hrm.heartRate);
+     peerSocket.addEventListener("open", (evt) => {
+      sendMessage({
+        status : "heart_rate",
+        data : hrm.heartRate
+      });
      });
-     if(hrm.heartRate >92){
-       vibration.start("ring");
-       console.log("vibrate");
-       demo.text = "Are you good?"
-       buttonyes.style.visibility = "visible"; 
-       buttonno.style.visibility = "visible"; 
-     }
-
    });
    hrm.start();
   
