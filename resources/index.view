@@ -1,3 +1,5 @@
-<svg>
-  <rect id="background" />
+<svg class="background">
+  <text id="demotext" x="50%" y="50%+15">Hello World!</text>
+  <use id="button-yes" y = "70%" href="#icon-text-button" class="icon-text-button primary application-fill" />
+  <use id="button-no" href="#icon-text-button" class="icon-text-button secondary application-fill" />
 </svg>
